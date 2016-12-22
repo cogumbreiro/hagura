@@ -1,5 +1,5 @@
 ---
-layout: compress
+layout: none
 ---
 <!DOCTYPE html>
 <html>
@@ -9,10 +9,40 @@ layout: compress
   <title>{% if page.title %}{{ page.title }} - {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
   <link href="https://fonts.googleapis.com/css?family=Lato:900|Work+Sans" rel="stylesheet">
   <link rel="stylesheet" href="{{site.baseurl}}/css/main.css">
-  {% seo %}
+  <link href="{{site.baseurl}}/css/vis.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="{{site.baseurl}}/js/vis.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono" rel="stylesheet" />
 </head>
 <body style="background-color: rgb(255, 255, 255)">
  <script src="{{site.baseurl}}/js/theme.min.js"></script>
+
+ <script type="text/javascript">
+    var OPTS = {
+      edges: {
+        width: 2,
+        smooth: {
+          type: 'vertical'
+        },
+        shadow: true
+      },
+      nodes : {
+        shape: 'dot',
+        size: 10,
+        shadow: true,
+        font: {face:'Droid Sans Mono', size: 15, strokeWidth:5, strokeColor:'#ffffff'}
+      },
+      layout: {
+        randomSeed: 0
+      },
+      physics: {
+        enabled: false
+      }
+    };
+ </script>
+ <script src="{{site.baseurl}}/js/cg.js"></script>
+ {% if page.load_cg %}
+ <meta name="foo" content="{{page.load_cg}}" />
+ {% endif %}
   <header>
       <a href="{{site.baseurl}}/"><div class="home"></div></a>
   </header>
