@@ -1,11 +1,28 @@
 ---
 layout: post
-title:  "Trace inspector"
-date:   2016-09-16 23:34:56 +0530
+title:  "Habanero Phaser formalization"
+date:   2016-12-27 23:34:56 +0530
 use_cg: true
 ---
 
-<p>Execution trace:</p>
+
+<p>The following two operations are translated directly from our Coq formalization.</p>
+
+<ul>
+<li><code>hj.run(op,ph)</code> performs a reduction step by applying operation <code>op</code> to phaser state <code>ph</code>. The function returns the new state or throws an exception if it cannot reduce.</li>
+<li><code>hj.hb(ph1,ph2)</code> checks phaser <code>ph1</code> happens-before phaser <code>ph1</code>.</li>
+</ul>
+
+<p><strong>Example 1:</strong> In the following example we exercise our definitions and show the a phaser state.
+The widget below is a Javascript
+<a href="https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop">REPL</a>; input a Javascript expression to interact with the widget.</p>
+<figure class="highlight">
+<div id="sandbox" class="sandbox">sandbox loading...</div>
+</figure>
+
+<h1>Vizualize the happens-before on a trace</h1>
+
+<p>Input trace:</p>
 
 <figure class="highlight">
 <textarea id="trace_in" onkeyup="update_graph()">
@@ -29,40 +46,16 @@ use_cg: true
 <div id="graph_out" />
 </figure>
 
-<p>Evaluate the reduction-relation with function <code>run(op, ph)</code> and the HB-relation with function <code>hb(ph1,ph2)</code>:</p>
-
-
-<figure class="highlight">
-<div id="sandbox" class="sandbox">sandbox loading...</div>
-</figure>
-
+<p>We provide the following functions to handle a trace:</p>
+<ul>
+<li><code>trace()</code> returns the trace from the input text box.</code></li>
+<li><code>hj.run_trace(t)</code> returns a phaser state from a given trace <code>t</code>.</li>
+<li><code>hj.render_graph(t)</code> renders trace <code>t</code> in the visualization widget.</li>
+</ul>
 <p>
-Function <code>trace()</code> loads the contents of the text area.
-Function <code>hj.run_trace(t)</code> converts a trace into a phaser state (by invoking run multiple times).
-So, the following expression returns the state associated with the existing
-trace.
-</p>
 
 
-<figure class="highlight">
-<pre>
-hj.run_trace(trace());
-</pre>
-</figure>
-
-<p>
-Function <code>render_graph(t)</code> updates the graph widget with and visualizes trace <code>t</code>.
-The following example updates the visualization of the trace in the text area.
-</p>
-<figure class="highlight">
-<pre>
-hj.render_graph(trace());
-</pre>
-</figure>
-
-
-<p>
-<strong>Example:</strong> comparing any state of the trace.
+<p><strong>Example 2:</strong> comparing any state of the trace.</p>
 
 
 <figure class="highlight">
