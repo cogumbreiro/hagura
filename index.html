@@ -1,7 +1,74 @@
 ---
-layout: default
+layout: post
+title:  "Trace inspector"
+date:   2016-09-16 23:34:56 +0530
+use_cg: true
 ---
-<h1 class="headline">{{site.title}}</h1>
-{% for post in site.posts %}
-<h3><a href="{{post.url | prepend: site.baseurl}}">{{post.title}}</a></h3>
-{% endfor %}
+
+<p>Execution trace:</p>
+
+<figure class="highlight">
+<textarea id="trace_in" onkeyup="update_graph()">
+// Example of a trace
+[
+  reg(2, {dst:3, mode:SW}),
+  reg(2, {dst:1, mode:WO}),
+  drop(2),
+  signal(3),
+  wait(3),
+  wait(1),
+  signal(3),
+  wait(1),
+]
+</textarea>
+</figure>
+
+<p>Visualize the phase-ordering relation:</p>
+
+<figure class="highlight">
+<div id="graph_out" />
+</figure>
+
+<p>Evaluate the reduction-relation with function <code>run(op, ph)</code> and the HB-relation with function <code>hb(ph1,ph2)</code>:</p>
+
+
+<figure class="highlight">
+<div id="sandbox">sandbox loading...</div>
+</figure>
+
+<!-- The sandbox template -->
+<script type="text/template" id="tplSandbox">
+	<pre class="output"></pre>
+	<div class="input">
+		<textarea rows="1" placeholder="<%= placeholder %>"></textarea>
+	</div>
+</script>
+
+<!-- The command/result template (NB whitespace/line breaks matter inside <pre> tag): -->
+<script type="text/template" id="tplCommand"><% if (! _hidden) { %><span class="command"><%= command %></span>
+<span class="prefix"><%= this.resultPrefix %></span><span class="<%= _class %>"><%= result %></span>
+<% } %></script>
+
+<script src="{{site.baseurl}}/javascript-sandbox-console/src/libs/underscore.min.js"></script>
+<script src="{{site.baseurl}}/javascript-sandbox-console/src/libs/backbone.min.js"></script>
+<script src="{{site.baseurl}}/javascript-sandbox-console/src/libs/backbone-localStorage.min.js"></script><!-- opt -->
+<script src="{{site.baseurl}}/javascript-sandbox-console/src/libs/jquery.min.js"></script>
+
+<script src="{{site.baseurl}}/javascript-sandbox-console/src/sandbox-console.js"></script>
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		// Create the sandbox:
+		window.sandbox = new Sandbox.View({
+			el : $('#sandbox'),
+			model : new Sandbox.Model()
+		});
+		window.sandbox.addCode("// Create a phaser with two task, both on phase 0\nvar p1 = {1: {sp:0,wp:0,mode:SW}, 2:{sp:0,wp:0,mode:SW}}; p1");
+		window.sandbox.addCode("// First, task 1 signals\nvar p2 = run(signal(1), p1); p2");
+		window.sandbox.addCode("// Then, task 2 signals\nvar p3 = run(signal(2), p2); p3");
+		window.sandbox.addCode("// Finally, task 1 waited\nvar p4 = run(wait(2), p3); p4");
+		window.sandbox.addCode("hb(p1,p2); // Phaser ph1 does not happen before ph2");
+		window.sandbox.addCode("hb(p1,p4); // Yet, phaser p1 precedes the wait that results in p4");
+		window.sandbox.addCode("run(wait(1), p1); // Task 1 cannot reduce at state p1");
+	});
+</script>
+

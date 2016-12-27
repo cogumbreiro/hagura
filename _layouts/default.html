@@ -9,11 +9,17 @@ layout: none
   <title>{% if page.title %}{{ page.title }} - {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
   <link href="https://fonts.googleapis.com/css?family=Lato:900|Work+Sans" rel="stylesheet">
   <link rel="stylesheet" href="{{site.baseurl}}/css/main.css">
+
   <link href="{{site.baseurl}}/css/vis.css" rel="stylesheet" type="text/css" />
   <script type="text/javascript" src="{{site.baseurl}}/js/vis.js"></script>
+  <script type="text/javascript" src="{{site.baseurl}}/js/hj.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono" rel="stylesheet" />
+  
+  <link href="{{site.baseurl}}/javascript-sandbox-console/src/sandbox.css" rel="stylesheet"/>
 </head>
-<body style="background-color: rgb(255, 255, 255)">
+
+ <body style="background-color: rgb(255, 255, 255)">
+ <script src="{{site.baseurl}}/js/cstruct.js"></script>
  <script src="{{site.baseurl}}/js/theme.min.js"></script>
 
  <script type="text/javascript">
@@ -36,8 +42,49 @@ layout: none
       },
       physics: {
         enabled: false
+      },
+      interaction: {
+        zoomView: false
       }
     };
+    var lastTrace = [];
+
+    function update_graph() {
+        var txt = document.getElementById('trace_in');
+        var t = eval(txt.value);
+        t.reverse();
+        render_graph(t);
+    }
+
+    function render_graph(trace) {
+        try {
+            if (trace != lastTrace) {
+                lastTrace = trace;
+                var out = document.getElementById('graph_out');
+                new vis.Network(out, hj.graph(lastTrace), OPTS);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+        return false;
+    }
+    window.onload = update_graph;
+    
+    function wait(task) {
+        return {src:task, op:{name: "wait"}};
+    }
+    function signal(task) {
+        return {src:task, op:{name: "signal"}};
+    }
+    function drop(task) {
+        return {src:task, op:{name: "drop"}};
+    }
+    var WO = "WO";
+    var SW = "SW";
+    var SO = "SO";
+    function reg(task, r) {
+        return {src:task, op:{name:"reg", dst:r.dst, mode:r.mode}}
+    }
  </script>
  <script src="{{site.baseurl}}/js/cg.js"></script>
  {% if page.load_cg %}
