@@ -33,47 +33,12 @@ use_cg: true
 
 
 <figure class="highlight">
-<div id="sandbox">sandbox loading...</div>
+<div id="sandbox" class="sandbox">sandbox loading...</div>
 </figure>
-
-<!-- The sandbox template -->
-<script type="text/template" id="tplSandbox">
-	<pre class="output"></pre>
-	<div class="input">
-		<textarea rows="1" placeholder="<%= placeholder %>"></textarea>
-	</div>
-</script>
-
-<!-- The command/result template (NB whitespace/line breaks matter inside <pre> tag): -->
-<script type="text/template" id="tplCommand"><% if (! _hidden) { %><span class="command"><%= command %></span>
-<span class="prefix"><%= this.resultPrefix %></span><span class="<%= _class %>"><%= result %></span>
-<% } %></script>
-
-<script src="{{site.baseurl}}/javascript-sandbox-console/src/libs/underscore.min.js"></script>
-<script src="{{site.baseurl}}/javascript-sandbox-console/src/libs/backbone.min.js"></script>
-<script src="{{site.baseurl}}/javascript-sandbox-console/src/libs/jquery.min.js"></script>
-
-<script src="{{site.baseurl}}/javascript-sandbox-console/src/sandbox-console.js"></script>
-<script type="text/javascript">
-	jQuery(document).ready(function($) {
-		// Create the sandbox:
-		window.sandbox = new Sandbox.View({
-			el : $('#sandbox'),
-			model : new Sandbox.Model()
-		});
-		window.sandbox.addCode("// Create a phaser with two task, both on phase 0\nvar p1 = {1: {sp:0,wp:0,mode:SW}, 2:{sp:0,wp:0,mode:SW}}; p1");
-		window.sandbox.addCode("// First, task 1 signals\nvar p2 = hj.run(signal(1), p1); p2");
-		window.sandbox.addCode("// Then, task 2 signals\nvar p3 = hj.run(signal(2), p2); p3");
-		window.sandbox.addCode("// Finally, task 1 waited\nvar p4 = hj.run(wait(2), p3); p4");
-		window.sandbox.addCode("hj.hb(p1,p2); // Phaser ph1 does not happen before ph2");
-		window.sandbox.addCode("hj.hb(p1,p4); // Yet, phaser p1 precedes the wait that results in p4");
-		window.sandbox.addCode("hj.run(wait(1), p1); // Task 1 cannot reduce at state p1");
-	});
-</script>
 
 <p>
 Function <code>trace()</code> loads the contents of the text area.
-Function <code>run_trace(t)</code> converts a trace into a phaser state (by invoking run multiple times).
+Function <code>hj.run_trace(t)</code> converts a trace into a phaser state (by invoking run multiple times).
 So, the following expression returns the state associated with the existing
 trace.
 </p>
@@ -94,4 +59,60 @@ The following example updates the visualization of the trace in the text area.
 hj.render_graph(trace());
 </pre>
 </figure>
+
+
+<p>
+<strong>Example:</strong> comparing any state of the trace.
+
+
+<figure class="highlight">
+<div id="sandbox-2" class="sandbox">sandbox loading...</div>
+</figure>
+
+
+
+
+<!-- The sandbox template -->
+<script type="text/template" id="tplSandbox">
+	<pre class="output"></pre>
+	<div class="input">
+		<textarea rows="1" placeholder="<%= placeholder %>"></textarea>
+	</div>
+</script>
+
+<!-- The command/result template (NB whitespace/line breaks matter inside <pre> tag): -->
+<script type="text/template" id="tplCommand"><% if (! _hidden) { %><span class="command"><%= command %></span>
+<span class="prefix"><%= this.resultPrefix %></span><span class="<%= _class %>"><%= result %></span>
+<% } %></script>
+
+<script src="{{site.baseurl}}/javascript-sandbox-console/src/libs/underscore.min.js"></script>
+<script src="{{site.baseurl}}/javascript-sandbox-console/src/libs/backbone.min.js"></script>
+<script src="{{site.baseurl}}/javascript-sandbox-console/src/libs/backbone-localStorage.min.js"></script><!-- opt -->
+<script src="{{site.baseurl}}/javascript-sandbox-console/src/libs/jquery.min.js"></script>
+
+<script src="{{site.baseurl}}/javascript-sandbox-console/src/sandbox-console.js"></script>
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		// Create the sandbox:
+		window.sandbox1 = new Sandbox.View({
+			el : $('#sandbox'),
+			model : new Sandbox.Model()
+		});
+		window.sandbox1.addCode("// Create a phaser with two task, both on phase 0\nvar p1 = {1: {sp:0,wp:0,mode:SW}, 2:{sp:0,wp:0,mode:SW}}; p1");
+		window.sandbox1.addCode("// First, task 1 signals\nvar p2 = hj.run(signal(1), p1); p2");
+		window.sandbox1.addCode("// Then, task 2 signals\nvar p3 = hj.run(signal(2), p2); p3");
+		window.sandbox1.addCode("// Finally, task 1 waited\nvar p4 = hj.run(wait(2), p3); p4");
+		window.sandbox1.addCode("hj.hb(p1,p2); // Phaser ph1 does not happen before ph2");
+		window.sandbox1.addCode("hj.hb(p1,p4); // Yet, phaser p1 precedes the wait that results in p4");
+		window.sandbox1.addCode("hj.run(wait(1), p1); // Task 1 cannot reduce at state p1");
+
+		window.sandbox2 = new Sandbox.View({
+			el : $('#sandbox-2'),
+			model : new Sandbox.Model()
+		});
+		window.sandbox2.addCode("// Use Javascript's `splice` to select a portion of the trace\nstateAt");
+		window.sandbox2.addCode("// We can now get the state of the phaser after the first operation\nstateAt(1)");
+		window.sandbox2.addCode("hj.hb(stateAt(1), hj.run_trace(trace()))");
+	});
+</script>
 

@@ -87,6 +87,11 @@ layout: none
         var txt = document.getElementById('trace_in');
         return eval(txt.value);
     }
+    
+    function stateAt(index) {
+        var t = trace();
+        return hj.run_trace(t.splice(t.length - index));
+    }
  </script>
  <script src="{{site.baseurl}}/js/cg.js"></script>
  {% if page.load_cg %}
