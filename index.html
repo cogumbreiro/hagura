@@ -105,7 +105,8 @@ The widget below is a Javascript
 		});
 		window.sandbox2.addCode("// Use Javascript's `splice` to select a portion of the trace\nstateAt");
 		window.sandbox2.addCode("// We can now get the state of the phaser after the first operation\nstateAt(1)");
-		window.sandbox2.addCode("hj.hb(stateAt(1), hj.run_trace(trace()))");
+		window.sandbox2.addCode("// Obtain the state produced by the trace\nhj.run_trace(trace())");
+		window.sandbox2.addCode("// See how the happens-before relation holds:\nhj.hb(stateAt(1), hj.run_trace(trace()))");
 	});
 </script>
 
