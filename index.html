@@ -51,7 +51,6 @@ use_cg: true
 
 <script src="{{site.baseurl}}/javascript-sandbox-console/src/libs/underscore.min.js"></script>
 <script src="{{site.baseurl}}/javascript-sandbox-console/src/libs/backbone.min.js"></script>
-<script src="{{site.baseurl}}/javascript-sandbox-console/src/libs/backbone-localStorage.min.js"></script><!-- opt -->
 <script src="{{site.baseurl}}/javascript-sandbox-console/src/libs/jquery.min.js"></script>
 
 <script src="{{site.baseurl}}/javascript-sandbox-console/src/sandbox-console.js"></script>
@@ -82,7 +81,7 @@ trace.
 
 <figure class="highlight">
 <pre>
-run_trace(trace());
+hj.run_trace(trace());
 </pre>
 </figure>
 
@@ -92,7 +91,7 @@ The following example updates the visualization of the trace in the text area.
 </p>
 <figure class="highlight">
 <pre>
-render_graph(trace());
+hj.render_graph(trace());
 </pre>
 </figure>
 
