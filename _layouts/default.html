@@ -50,10 +50,7 @@ layout: none
     var lastTrace = [];
 
     function update_graph() {
-        var txt = document.getElementById('trace_in');
-        var t = eval(txt.value);
-        t.reverse();
-        render_graph(t);
+        render_graph(trace());
     }
 
     function render_graph(trace) {
@@ -84,6 +81,11 @@ layout: none
     var SO = "SO";
     function reg(task, r) {
         return {src:task, op:{name:"reg", dst:r.dst, mode:r.mode}}
+    }
+    
+    function trace() {
+        var txt = document.getElementById('trace_in');
+        return eval(txt.value);
     }
  </script>
  <script src="{{site.baseurl}}/js/cg.js"></script>

@@ -11,14 +11,14 @@ use_cg: true
 <textarea id="trace_in" onkeyup="update_graph()">
 // Example of a trace
 [
-  reg(2, {dst:3, mode:SW}),
-  reg(2, {dst:1, mode:WO}),
-  drop(2),
+  wait(1), // most recent
   signal(3),
+  wait(1),
   wait(3),
-  wait(1),
   signal(3),
-  wait(1),
+  drop(2),
+  reg(2, {dst:1, mode:WO}),
+  reg(2, {dst:3, mode:SW}), // first operation
 ]
 </textarea>
 </figure>
@@ -71,4 +71,28 @@ use_cg: true
 		window.sandbox.addCode("run(wait(1), p1); // Task 1 cannot reduce at state p1");
 	});
 </script>
+
+<p>
+Function <code>trace()</code> loads the contents of the text area.
+Function <code>run_trace(t)</code> converts a trace into a phaser state (by invoking run multiple times).
+So, the following expression returns the state associated with the existing
+trace.
+</p>
+
+
+<figure class="highlight">
+<pre>
+run_trace(trace());
+</pre>
+</figure>
+
+<p>
+Function <code>render_graph(t)</code> updates the graph widget with and visualizes trace <code>t</code>.
+The following example updates the visualization of the trace in the text area.
+</p>
+<figure class="highlight">
+<pre>
+render_graph(trace());
+</pre>
+</figure>
 
