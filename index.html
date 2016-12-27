@@ -81,8 +81,8 @@ hj.render_graph(trace());
 </script>
 
 <!-- The command/result template (NB whitespace/line breaks matter inside <pre> tag): -->
-<script type="text/template" id="tplCommand"><% if (! _hidden) { %><span class="command"><%= command %></span>
-<span class="prefix"><%= this.resultPrefix %></span><span class="<%= _class %>"><%= result %></span>
+<script type="text/template" id="tplCommand"><% if (! _hidden) { %><span class="command"><span class="prefix">&gt;&gt;&gt;</span> <%= command %></span>
+<span class="<%= _class %>"><%= result %></span>
 <% } %></script>
 
 <script src="{{site.baseurl}}/javascript-sandbox-console/src/libs/underscore.min.js"></script>

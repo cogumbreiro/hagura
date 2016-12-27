@@ -210,7 +210,7 @@ var Sandbox = {
 					return memo + this.format({
 						_hidden : command._hidden,
 						_class : command._class,
-						command : this.toEscaped(command.command),
+						command : this.toEscaped(command.command).split("\n").join("\n<span class=\"prefix\">...</span> "),
 						result :  this.toEscaped(command.result)
 					});
 				}, "", this)
