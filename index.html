@@ -4,10 +4,81 @@ title:  "Habanero Phaser formalization"
 date:   2016-12-27 23:34:56 +0530
 ---
 
+ <script type="text/javascript">
+    var OPTS = {
+      edges: {
+        width: 2,
+        smooth: {
+          type: 'vertical'
+        },
+        shadow: true
+      },
+      nodes : {
+        shape: 'dot',
+        size: 10,
+        shadow: true,
+        font: {face:'Droid Sans Mono', size: 15, strokeWidth:5, strokeColor:'#ffffff'}
+      },
+      layout: {
+        randomSeed: 0
+      },
+      physics: {
+        enabled: false
+      }
+    };
+    var lastTrace = [];
+
+    function update_graph() {
+        render_graph(trace());
+    }
+
+    function render_graph(trace) {
+        try {
+            if (trace != lastTrace) {
+                lastTrace = trace;
+                var out = document.getElementById('graph_out');
+                new vis.Network(out, hj.graph(lastTrace), OPTS);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+        return false;
+    }
+    window.onload = update_graph;
+    
+    function wait(task) {
+        return {src:task, op:{name: "wait"}};
+    }
+    function signal(task) {
+        return {src:task, op:{name: "signal"}};
+    }
+    function drop(task) {
+        return {src:task, op:{name: "drop"}};
+    }
+    var WO = "WO";
+    var SW = "SW";
+    var SO = "SO";
+    function reg(task, r) {
+        return {src:task, op:{name:"reg", dst:r.dst, mode:r.mode}}
+    }
+    
+    function trace() {
+        var txt = document.getElementById('trace_in');
+        return eval(txt.value);
+    }
+    
+    function stateAt(index) {
+        var t = trace();
+        return hj.run_trace(t.splice(t.length - index));
+    }
+ </script>
+
+
 <h1>Phaser state operations</h1>
 
-<p>The following two operations are translated automatically from our Coq
-formalization into Javascript.</p>
+<p>The following two operations are translated automatically from our
+<a href="https://github.com/cogumbreiro/habanero-coq">Coq formalization</a>
+into Javascript.</p>
 
 <ul>
 <li><code>hj.run(op,ph)</code> performs a reduction step by applying operation
@@ -16,6 +87,9 @@ formalization into Javascript.</p>
 </li>
 <li><code>hj.hb(ph1,ph2)</code> returns true if, and only if, phaser <code>ph1</code>
     happened before phaser <code>ph2</code>.
+</li>
+<li><code>hj.par(ph1,ph2)</code> returns true if, and only if, phaser <code>ph1</code>
+    may happen in parallel with <code>ph2</code>.
 </li>
 <li><code>hj.wf(ph)</code> returns true if, and only if, phaser <code>ph</code>
     is well-formed.
