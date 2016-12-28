@@ -14,8 +14,14 @@ formalization into Javascript.</p>
     <code>op</code> to phaser state <code>ph</code>. The function returns the
     new state or throws an exception if it cannot reduce.
 </li>
-<li><code>hj.hb(ph1,ph2)</code> returns true if phaser <code>ph1</code>
+<li><code>hj.hb(ph1,ph2)</code> returns true if, and only if, phaser <code>ph1</code>
     happened before phaser <code>ph2</code>.
+</li>
+<li><code>hj.wf(ph)</code> returns true if, and only if, phaser <code>ph</code>
+    is well-formed.
+</li>
+<li><code>hj.wo(ph)</code> returns true if, and only if, phaser <code>ph</code>
+    is well-ordered.
 </li>
 </ul>
 
@@ -109,6 +115,7 @@ input a Javascript expression to exercise our functions.
 		window.sandbox1.addCode("hj.hb(p1,p2); // Phaser ph1 does not happen before ph2");
 		window.sandbox1.addCode("hj.hb(p1,p4); // Yet, phaser p1 precedes the wait that results in p4");
 		window.sandbox1.addCode("hj.run(wait(1), p1); // Task 1 cannot reduce at state p1");
+		window.sandbox1.addCode("// Phaser ph1 is well-formed and well-ordered.\nhj.wo(p1) && hj.wf(p1)");
 
 		window.sandbox2 = new Sandbox.View({
 			el : $('#sandbox-2'),
