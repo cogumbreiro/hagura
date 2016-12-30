@@ -46,20 +46,14 @@ date:   2016-12-27 23:34:56 +0530
     }
     window.onload = update_graph;
     
-    function wait(task) {
-        return {src:task, op:{name: "wait"}};
-    }
-    function signal(task) {
-        return {src:task, op:{name: "signal"}};
-    }
-    function drop(task) {
-        return {src:task, op:{name: "drop"}};
-    }
+    function wait() { return {name: "wait"};}
+    function signal() { return {name: "signal"};}
+    function drop() { return {name: "drop"}; }
     var WO = "WO";
     var SW = "SW";
     var SO = "SO";
-    function reg(task, r) {
-        return {src:task, op:{name:"reg", dst:r.dst, mode:r.mode}}
+    function reg(dst, m) {
+        return {name:"reg", dst:dst, mode:m};
     }
     
     function trace() {
@@ -116,14 +110,14 @@ input a Javascript expression to exercise our functions.
 <textarea id="trace_in" onkeyup="update_graph()">
 // Example of a trace
 [
-  wait(1), // most recent
-  signal(3),
-  wait(1),
-  wait(3),
-  signal(3),
-  drop(2),
-  reg(2, {dst:1, mode:WO}),
-  reg(2, {dst:3, mode:SW}), // first operation
+  [1, wait()], // most recent
+  [3, signal()],
+  [1, wait()],
+  [3, wait()],
+  [3, signal()],
+  [2, drop()],
+  [2, reg(1, WO)],
+  [2, reg(3, SW)], // first operation
 ]
 </textarea>
 </figure>
@@ -182,10 +176,11 @@ input a Javascript expression to exercise our functions.
 			model : new Sandbox.Model(),
 			placeholder : "Type a javascript expression and hit enter (:help for info)"
 		});
-		window.sandbox1.addCode("// Declare a phaser with two task, both on phase 0\nvar p1 = {1: {sp:0,wp:0,mode:SW}, 2:{sp:0,wp:0,mode:SW}}; p1");
-		window.sandbox1.addCode("// First, task 1 signals\nvar p2 = hj.run(signal(1), p1); p2");
-		window.sandbox1.addCode("// Then, task 2 signals\nvar p3 = hj.run(signal(2), p2); p3");
-		window.sandbox1.addCode("// Finally, task 1 waited\nvar p4 = hj.run(wait(2), p3); p4");
+		window.sandbox1.addCode("// Declare a phaser with two task, both on phase 0\nvar p1 = {1: {sp:0,wp:0,mode:SW}, 2:{sp:0,wp:0,mode:SW}};\np1 // prints the state");
+
+		window.sandbox1.addCode("// First, task 1 signals\nvar p2 = hj.run([1, signal()], p1);\np2");
+		window.sandbox1.addCode("// Then, task 2 signals\nvar p3 = hj.run([2, signal()], p2);\np3");
+		window.sandbox1.addCode("// Finally, task 1 waited\nvar p4 = hj.run([2,wait()], p3);\np4");
 		window.sandbox1.addCode("hj.hb(p1,p2); // Phaser ph1 does not happen before ph2");
 		window.sandbox1.addCode("hj.hb(p1,p4); // Yet, phaser p1 precedes the wait that results in p4");
 		window.sandbox1.addCode("hj.run(wait(1), p1); // Task 1 cannot reduce at state p1");
