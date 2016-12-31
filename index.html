@@ -24,7 +24,11 @@ date:   2016-12-27 23:34:56 +0530
       },
       physics: {
         enabled: false
-      }
+      },
+      interaction: {
+        navigationButtons: true,
+        zoomView: false
+      }      
     };
     var lastTrace = [];
 
@@ -63,6 +67,7 @@ date:   2016-12-27 23:34:56 +0530
     
     function stateAt(index) {
         var t = trace();
+        if (index >= t.length || index < 0) { throw new Error("Invalid index: " + index); }
         return hj.run_trace(t.splice(t.length - index));
     }
  </script>
@@ -139,9 +144,6 @@ input a Javascript expression to exercise our functions.
 <p>
 
 
-<p><strong>Example 2:</strong> comparing any state of the trace.</p>
-
-
 <figure class="highlight">
 <div id="sandbox-2" class="sandbox">sandbox loading...</div>
 </figure>
@@ -158,8 +160,8 @@ input a Javascript expression to exercise our functions.
 </script>
 
 <!-- The command/result template (NB whitespace/line breaks matter inside <pre> tag): -->
-<script type="text/template" id="tplCommand"><% if (! _hidden) { %><span class="command"><span class="prefix">&gt;&gt;&gt;</span> <%= command %></span>
-<span class="<%= _class %>"><%= result %></span>
+<script type="text/template" id="tplCommand"><% if (! _hidden) { %><span class="command"><span class="prefix">&gt;&gt;&gt;</span> <%= command %></span><% if (_class != "undefined") { %>
+<span <% if (_class != undefined) { %> class="<%= _class %>" <% } %> ><%= result %></span><% } %>
 <% } %></script>
 
 <script src="{{site.baseurl}}/javascript-sandbox-console/src/libs/underscore.min.js"></script>
@@ -176,25 +178,36 @@ input a Javascript expression to exercise our functions.
 			model : new Sandbox.Model(),
 			placeholder : "Type a javascript expression and hit enter (:help for info)"
 		});
-		window.sandbox1.addCode("// Declare a phaser with two task, both on phase 0\nvar p1 = {1: {sp:0,wp:0,mode:SW}, 2:{sp:0,wp:0,mode:SW}};\np1 // prints the state");
-
-		window.sandbox1.addCode("// First, task 1 signals\nvar p2 = hj.run([1, signal()], p1);\np2");
-		window.sandbox1.addCode("// Then, task 2 signals\nvar p3 = hj.run([2, signal()], p2);\np3");
-		window.sandbox1.addCode("// Finally, task 1 waited\nvar p4 = hj.run([2,wait()], p3);\np4");
-		window.sandbox1.addCode("hj.hb(p1,p2); // Phaser ph1 does not happen before ph2");
-		window.sandbox1.addCode("hj.hb(p1,p4); // Yet, phaser p1 precedes the wait that results in p4");
-		window.sandbox1.addCode("hj.run(wait(1), p1); // Task 1 cannot reduce at state p1");
-		window.sandbox1.addCode("// Phaser ph1 is well-formed and well-ordered.\nhj.wo(p1) && hj.wf(p1)");
+		window.sandbox1.addCode("// Declare a phaser with two task, both on phase 0");
+		window.sandbox1.addCode("p1 = {1: {sp:0,wp:0,mode:SW}, 2:{sp:0,wp:0,mode:SW}};");
+		window.sandbox1.addCode("// First, task 1 signals");
+		window.sandbox1.addCode("p2 = hj.run([1, signal()], p1);");
+		window.sandbox1.addCode("// Then, task 2 signals");
+		window.sandbox1.addCode("p3 = hj.run([2, signal()], p2);");
+		window.sandbox1.addCode("// Finally, task 1 waited")
+		window.sandbox1.addCode("p4 = hj.run([2,wait()], p3);");
+		window.sandbox1.addCode("// Phaser ph1 does not happen before ph2");
+		window.sandbox1.addCode("hj.par(p1,p2);");
+		window.sandbox1.addCode("// Yet, phaser p1 precedes the wait that results in p4");
+		window.sandbox1.addCode("hj.hb(p1,p4);");
+		window.sandbox1.addCode("// Task 1 cannot reduce at state p1");
+		window.sandbox1.addCode("hj.run([1,wait()], p1);");
+		window.sandbox1.addCode("// Phaser ph1 is well-formed and well-ordered.");
+		window.sandbox1.addCode("hj.wo(p1) && hj.wf(p1)");
 
 		window.sandbox2 = new Sandbox.View({
 			el : $('#sandbox-2'),
 			model : new Sandbox.Model(),
 			placeholder : "Type a javascript expression and hit enter (:help for info)"
 		});
-		window.sandbox2.addCode("// Use Javascript's `splice` to select a portion of the trace\nstateAt");
-		window.sandbox2.addCode("// We can now get the state of the phaser after the first operation\nstateAt(1)");
-		window.sandbox2.addCode("// Obtain the state produced by the trace\nhj.run_trace(trace())");
-		window.sandbox2.addCode("// See how the happens-before relation holds:\nhj.hb(stateAt(1), hj.run_trace(trace()))");
+		window.sandbox2.addCode("// Use Javascript's `splice` to select a portion of the trace");
+		window.sandbox2.addCode("stateAt");
+		window.sandbox2.addCode("// We can now get the state of the phaser after the first operation");
+		window.sandbox2.addCode("stateAt(1)");
+		window.sandbox2.addCode("// Obtain the state produced by the trace");
+		window.sandbox2.addCode("hj.run_trace(trace())");
+		window.sandbox2.addCode("// See how the happens-before relation holds:");
+		window.sandbox2.addCode("hj.hb(stateAt(1), hj.run_trace(trace()))");
 	});
 </script>
 
