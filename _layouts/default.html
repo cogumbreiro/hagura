@@ -24,23 +24,8 @@ layout: none
  <script src="{{site.baseurl}}/js/cstruct.js"></script>
  <script src="{{site.baseurl}}/js/theme.min.js"></script>
 
- {% if page.load_cg %}
- <meta name="foo" content="{{page.load_cg}}" />
- {% endif %}
-  <header>
-      <a href="{{site.baseurl}}/"><div class="home"></div></a>
-  </header>
 
   {{ content }}
-
-<footer>
-
-    <div class="links">
-        <a href="{{site.baseurl}}/about/">About</a>
-        <a href="{{site.baseurl}}/contact/">Contact</a>
-    </div>
-    <div class="theme" onclick="theme()" style="    background-image: url({{site.baseurl}}/images/theme.svg)"></div>
-</footer>
 
 </body>
 </html>
