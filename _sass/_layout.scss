@@ -1,6 +1,6 @@
 @charset "utf-8";
 main {
-    max-width: 48rem;
+    max-width: $base-width;
     margin: 0 auto 3rem;
     padding: 0 2rem;
 }
@@ -56,7 +56,7 @@ main {
         font-size: $small-font-size;
     }
 }
-@media screen and (max-width: 48rem) {
+@media screen and (max-width: $base-width) {
     .site-header {
         .site-title,
         .site-nav {
