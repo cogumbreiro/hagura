@@ -106,21 +106,20 @@ into Javascript.</p>
 </li>
 </ul>
 
-<p><strong>Executable samples.</strong>
+<p>
+<strong>Executable samples.</strong>
 The widget below is a Javascript
 <a href="https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop">REPL</a>;
 input a Javascript expression to exercise our functions.
 </p>
-<figure class="highlight">
+
 <div id="sandbox" class="sandbox">sandbox loading...</div>
-</figure>
 
 <h1>Happens-before visualization</h1>
 
 <p>The trace in the text box is rendered as a graph. Editing the trace automatically updates the graph.</p>
 
-<figure class="highlight">
-<textarea id="trace_in" onkeyup="update_graph()">
+<textarea id="trace_in" onkeyup="update_graph()" class="highlight">
 // Example of a trace
 [
   [1, wait()], // most recent
@@ -133,28 +132,23 @@ input a Javascript expression to exercise our functions.
   [2, reg(3, SW)], // first operation
 ]
 </textarea>
-</figure>
 
 <p>Rendering of the trace:</p>
 
-<figure class="highlight">
-<div id="graph_out" />
-</figure>
+<div id="graph_out"></div>
 
 <h1>Trace manipulation</h1>
 
 <p>We provide the following functions to handle a trace:</p>
+
 <ul>
-<li><code>trace()</code> returns the trace from the input text box.</code></li>
+<li><code>trace()</code> returns the trace from the input text box.</li>
 <li><code>hj.run_trace(t)</code> returns a phaser state from a given trace <code>t</code>.</li>
 <li><code>hj.render_graph(t)</code> renders trace <code>t</code> in the visualization widget.</li>
 </ul>
-<p>
 
 
-<figure class="highlight">
 <div id="sandbox-2" class="sandbox">sandbox loading...</div>
-</figure>
 
 <h1>Colophon</h1>
 

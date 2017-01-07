@@ -58,6 +58,7 @@
 	resize: none;
 	width:100%;
 	overflow-y:auto;
+	height: 1.5em;
 }
 .sandbox textarea:focus {
 	outline:0 none;
