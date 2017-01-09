@@ -58,22 +58,13 @@ pre {
     padding: 1.25rem;
     overflow-x: auto;
 }
-code {
+code, text-area {
     font-family: $code-font-family;
     tab-size: 4;
 }
 hr {
     border: none;
     border-top: 2px solid $border-color;
-}
-
-#graph_out {
-    background: #FFF;
-    width: 100%;
-    height: 24em;
-    overflow: auto;
-    border-radius: 3px;
-    border: 1px solid $border-color;
 }
 
 pre,
@@ -86,8 +77,8 @@ textarea {
         border: none;
     }
 }
-pre {
-        padding: 1em;
+pre, textarea {
+    padding: 1em;
 }
 code {
     padding: 0.1em;
@@ -104,6 +95,5 @@ figure {
 textarea {
     height: 14em;
 	width:100%;
-	border: $border-color;
 }
 
